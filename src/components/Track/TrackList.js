@@ -36,14 +36,14 @@ const TrackList = ({ classes, tracks }) => (
               }
             />
             <LikeTrack />
-            <AudioPlayer />
+            <AudioPlayer url={track.url} />
           </ListItem>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails className={classes.details}>
           <Typography variant="body1">{track.description}</Typography>
         </ExpansionPanelDetails>
         <ExpansionPanelActions>
-          <UpdateTrack />
+          <UpdateTrack track={track} />
           <DeleteTrack />
         </ExpansionPanelActions>
       </ExpansionPanel>

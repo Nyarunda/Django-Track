@@ -25,10 +25,17 @@ const CreateTrack = ({ classes }) => {
   const [description, setDescription] = useState('');
   const [file, setFile] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [fileError, setFileError] = useState('');
 
   const handleAudioChange = (event) => {
     const selectedFile = event.target.files[0];
-    setFile(selectedFile);
+    const filiSizeLimit = 10000000;
+    if (selectedFile && selectedFile.size > filiSizeLimit) {
+      setFileError(`${selectedFile.name}: The File is too large`);
+    } else {
+      setFile(selectedFile);
+      setFileError(' ');
+    }
   };
   const handleAudioUpload = async () => {
     try {
@@ -73,6 +80,9 @@ const CreateTrack = ({ classes }) => {
           setSubmitting(false);
           console.log(data);
           setOpen(false);
+          setTitle('');
+          setDescription('');
+          setFile('');
         }}
         refetchQueries={() => [{ query: GET_TRACKS_QUERY }]}
       >
@@ -81,6 +91,7 @@ const CreateTrack = ({ classes }) => {
           return (
             <Dialog open={open} className={classes.dialog}>
               <form onSubmit={(event) => handleSubmit(event, createTrack)}>
+                <DialogTitle>Create Track</DialogTitle>
                 <DialogContent>
                   <DialogContentText>
                     Add Title, Description and Audio File
@@ -88,6 +99,7 @@ const CreateTrack = ({ classes }) => {
                   <FormControl fullWidth>
                     <TextField
                       label="Title"
+                      value={title}
                       placeholder="Add Title"
                       onChange={(event) => setTitle(event.target.value)}
                       className={classes.textField}
@@ -98,12 +110,13 @@ const CreateTrack = ({ classes }) => {
                       multiline
                       rows="4"
                       label="Description"
+                      value={description}
                       onChange={(event) => setDescription(event.target.value)}
                       placeholder="Add Description"
                       className={classes.textField}
                     />
                   </FormControl>
-                  <FormControl>
+                  <FormControl error={Boolean(fileError)}>
                     <input
                       id="audio"
                       required
@@ -123,6 +136,7 @@ const CreateTrack = ({ classes }) => {
                         <LibraryMusicIcon className={classes.icon} />
                       </Button>
                       {file && file.name}
+                      <FormHelperText>{fileError}</FormHelperText>
                     </label>
                   </FormControl>
                 </DialogContent>
