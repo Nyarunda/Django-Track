@@ -55,10 +55,10 @@ const styles = (theme) => ({
   faceIcon: {
     marginRight: theme.spacing.unit,
     fontSize: 30,
-    color: 'white',
+    color: '#707070',
   },
   username: {
-    color: 'white',
+    color: '#707070',
     fontSize: 30,
   },
 });
